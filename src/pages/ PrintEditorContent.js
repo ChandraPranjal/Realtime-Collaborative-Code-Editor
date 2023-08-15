@@ -35,7 +35,7 @@ function PrintEditorContent() {
             url: 'https://online-code-compiler.p.rapidapi.com/v1/',
             headers: {
                 'content-type': 'application/json',
-                'X-RapidAPI-Key': '297f284233mshb46d835f69da66dp18aa49jsnd187e5bbfb2b',
+                'X-RapidAPI-Key': ,//Get yours from RapidAPI
                 'X-RapidAPI-Host': 'online-code-compiler.p.rapidapi.com'
             },
             data: {
