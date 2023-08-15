@@ -11,6 +11,9 @@ import {
     useParams,
 } from 'react-router-dom';
 
+import { Button } from '@mui/material';
+import PrintEditorContent from './ PrintEditorContent';
+
 const EditorPage = () => {
     const socketRef = useRef(null);
     const codeRef = useRef(null);
@@ -18,7 +21,7 @@ const EditorPage = () => {
     const { roomId } = useParams();
     const reactNavigator = useNavigate();
     const [clients, setClients] = useState([]);
-
+    const [codeInput, setCodeInput] = useState("Output");
     useEffect(() => {
         const init = async () => {
             socketRef.current = await initSocket();
@@ -86,48 +89,59 @@ const EditorPage = () => {
     function leaveRoom() {
         reactNavigator('/');
     }
+    function compilerHandler() {
 
+    }
     if (!location.state) {
         return <Navigate to="/" />;
     }
 
     return (
-        <div className="mainWrap">
-            <div className="aside">
-                <div className="asideInner">
-                    <div className="logo">
-                        <img
-                            className="logoImage"
-                            src="/code-sync.png"
-                            alt="logo"
-                        />
-                    </div>
-                    <h3>Connected</h3>
-                    <div className="clientsList">
-                        {clients.map((client) => (
-                            <Client
-                                key={client.socketId}
-                                username={client.username}
+        <div className='parent'>
+            <div className="mainWrap">
+                <div className="aside">
+                    <div className="asideInner">
+
+                        <div className="logo">
+                            <img
+                                className="logoImage"
+                                src="/code-sync.png"
+                                alt="logo"
                             />
-                        ))}
+                            <h3>CoEdit</h3>
+                        </div>
+                        <h3>Connected</h3>
+                        <div className="clientsList">
+                            {clients.map((client) => (
+                                <Client
+                                    key={client.socketId}
+                                    username={client.username}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="Button_CSS">
+                        <Button variant="outlined" color="error" onClick={copyRoomId}>
+                            Copy ROOM ID
+                        </Button>
+                        <Button variant="outlined" color="secondary" onClick={leaveRoom}>
+                            Leave
+                        </Button>
+
                     </div>
                 </div>
-                <button className="btn copyBtn" onClick={copyRoomId}>
-                    Copy ROOM ID
-                </button>
-                <button className="btn leaveBtn" onClick={leaveRoom}>
-                    Leave
-                </button>
+                <div className="editorWrap">
+                    <Editor
+                        socketRef={socketRef}
+                        roomId={roomId}
+                        onCodeChange={(code) => {
+                            codeRef.current = code;
+                        }}
+                    />
+                </div>
             </div>
-            <div className="editorWrap">
-                <Editor
-                    socketRef={socketRef}
-                    roomId={roomId}
-                    onCodeChange={(code) => {
-                        codeRef.current = code;
-                    }}
-                />
-            </div>
+            <PrintEditorContent />
+            {/* <Output /> */}
         </div>
     );
 };
